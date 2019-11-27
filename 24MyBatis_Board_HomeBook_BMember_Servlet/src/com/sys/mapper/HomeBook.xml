@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<!--Interface DAO를 사용하는 경우 -->
+<!--아래 태그의 ID는 인터페이스의 추상메소드명과 일치시켜야 ! -->
+<mapper namespace="com.sys.dao.HomeBookDAO"> 
+<resultMap id ="result" type="homebook"> 
+	<result property = "serialno" column = "SERIALNO"/> 
+	<result property = "day" column = "DAY"/> 
+	<result property = "section" column = "SECTION"/> 
+	<result property = "accountTitle" column = "ACCOUNT_TITLE"/> 
+	<result property = "remark" column = "REMARK"/> 
+	<result property = "revenue" column = "REVENUE"/> 
+	<result property = "expense" column = "EXPENSE"/> 
+	<result property = "userId" column = "USER_ID"/> 
+</resultMap>
+
+<select id = "selectAll" resultMap="result">
+	<![CDATA[
+	SELECT * FROM HOMEBOOK
+	]]>
+</select>
+
+<select id = "selectAllById" resultMap="result">
+	<![CDATA[
+	SELECT * FROM HOMEBOOK WHERE USER_ID = #{userId}
+	]]>
+</select>
+
+
+
+<insert id = "insert" parameterType="homebook">
+	<![CDATA[ 
+	INSERT INTO HOMEBOOK 
+	(SERIALNO,DAY,SECTION,ACCOUNT_TITLE,REMARK,REVENUE,EXPENSE,USER_ID)
+	VALUES
+	(HOMEBOOK_SEQ.NEXTVAL,#{day},#{section},#{accountTitle},#{remark},#{revenue},#{expense},#{userId})
+	]]>
+</insert>
+
+<update id ="update" parameterType="homebook">
+	UPDATE HOMEBOOK SET 
+	DAY=#{day},
+	SECTION=#{section},
+	ACCOUNT_TITLE=#{accountTitle},
+	REMARK=#{remark},
+	REVENUE=#{revenue},
+	EXPENSE=#{expense},
+	USER_ID=#{userId}
+	WHERE SERIALNO = #{serialno} 
+</update>
+
+<delete id="delete" parameterType="long">
+	DELETE FROM HOMEBOOK WHERE SERIALNO=#{serialno}
+</delete>
+
+<select id = "selectById" parameterType="long" resultMap="result">
+	SELECT * FROM HOMEBOOK WHERE SERIALNO=#{serialno}
+</select>
+
+</mapper> 

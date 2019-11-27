@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<!--Interface DAO를 사용하는 경우 -->
+<!--아래 태그의 ID는 인터페이스의 추상메소드명과 일치시켜야 ! -->
+<mapper namespace="com.sys.service.ServiceDAO"> 
+
+<resultMap id ="result" type="totalvo"> 
+	<result property = "memId" column = "회원아이디"/> 
+	<result property = "memName" column = "회원이름"/> 
+	<result property = "sumOfRevenue" column = "총수입금액"/> 
+	<result property = "sumOfExpense" column = "총지출금액"/> 
+</resultMap>
+
+<resultMap id ="resultHomeBook" type="homebook"> 
+	<result property = "serialno" column = "SERIALNO"/> 
+	<result property = "day" column = "DAY"/> 
+	<result property = "section" column = "SECTION"/> 
+	<result property = "accountTitle" column = "ACCOUNT_TITLE"/> 
+	<result property = "remark" column = "REMARK"/> 
+	<result property = "revenue" column = "REVENUE"/> 
+	<result property = "expense" column = "EXPENSE"/> 
+	<result property = "userId" column = "USER_ID"/> 
+</resultMap>
+
+
+<select id="getTotalList" resultMap="result">
+		SELECT 
+			H.USER_ID 회원아이디,
+			M.MNAME 회원이름,
+			SUM(H.REVENUE) 총수입금액,
+			SUM(H.EXPENSE) 총지출금액
+		FROM HOMEBOOK H,BMEMBER M
+		WHERE H.USER_ID = M.MID
+		GROUP BY USER_ID,M.MNAME
+</select>
+
+<select id = "countRows" resultType="long">
+	SELECT COUNT(*) FROM BOARD
+</select>
+
+<select 
+	id = "selectByUserId" 
+	parameterType="string"
+	resultMap="resultHomeBook">
+	SELECT * 
+	FROM HOMEBOOK 
+	WHERE USER_ID = #{userId}
+</select>
+
+<select
+	id = "selectBetweenData" 
+	parameterType = "map"
+	resultMap="resultHomeBook">
+	SELECT * FROM HOMEBOOK 
+	WHERE DAY BETWEEN #{startDay} AND #{endDay}
+	AND USER_ID = #{userId}
+</select>
+
+<select 
+	id = "getUserInfor"
+	parameterType = "string"
+	resultType = "map">
+	SELECT 
+		count(b.bno) boardnum,
+		sum(h.revenue) revesum,
+		sum(h.expense) expensum,
+		count(h.serialno) booknum
+	FROM BOARD b,HOMEBOOK h  
+	WHERE h.user_id = b.mid 
+	and h.user_id=#{id}	
+</select>
+
+
+
+
+	
+
+</mapper> 

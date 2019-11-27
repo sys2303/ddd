@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<!--Interface DAO를 사용하는 경우 -->
+<!--아래 태그의 ID는 인터페이스의 추상메소드명과 일치시켜야 ! -->
+<mapper namespace="com.sys.dao.BMemberDAO"> 
+<resultMap id ="result" type="bmember"> 
+
+	<result property = "mid" column = "MID"/> 
+	<result property = "mname" column = "MNAME"/> 
+	<result property = "mpassword" column = "MPASSWORD"/> 
+	<result property = "mphone" column = "MPHONE"/> 
+	<result property = "mjoinDate" column = "MJOIN_DATE"/> 
+	
+</resultMap>
+
+<select id = "selectAll" resultMap="result">
+	SELECT * FROM BMEMBER
+</select>
+
+<insert id = "insert" parameterType="bmember">
+	<![CDATA[ 
+	INSERT INTO BMEMBER 
+	(MID,MNAME,MPASSWORD,MPHONE,MJOIN_DATE)
+	VALUES
+	(#{mid},#{mname},#{mpassword},#{mphone},#{mjoinDate})
+	]]>
+</insert>
+
+<update id ="update" parameterType="bmember">
+	UPDATE BMEMBER SET 
+		MNAME=#{mname},
+		MPASSWORD=#{mpassword},
+		MPHONE=#{mphone},
+		MJOIN_DATE=#{mjoinDate}
+	WHERE MID = #{mid} 
+</update>
+
+<delete id="delete" parameterType="string">
+	DELETE FROM BMEMBER WHERE MID=#{mid}
+</delete>
+
+<select id = "selectById" parameterType="string" resultMap="result">
+	SELECT * FROM BMEMBER 
+	WHERE MID=#{mid}
+</select>
+
+</mapper> 

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<!--Interface DAO를 사용하는 경우 -->
+<!--아래 태그의 ID는 인터페이스의 추상메소드명과 일치시켜야 ! -->
+<mapper namespace="com.sys.dao.BoardDAO"> 
+<cache/>
+<sql id = "BaseColumns">
+	BNO,MID,BTITLE,BCONTENT,BDATE,BHIT,BGROUP,BSTEP,BINDENT
+</sql>
+
+<resultMap id ="result" type="board"> 
+	<result property = "bno" column = "BNO"/> 
+	<result property = "mid" column = "MID"/> 
+	<result property = "btitle" column = "BTITLE"/> 
+	<result property = "bcontent" column = "BCONTENT"/> 
+	<result property = "bdate" column = "BDATE"/> 
+	<result property = "bhit" column = "BHIT"/> 
+	<result property = "bgroup" column = "BGROUP"/> 
+	<result property = "bstep" column = "BSTEP"/> 
+	<result property = "bindent" column = "BINDENT"/> 
+</resultMap>
+
+<select id = "selectAll" resultMap="result">
+	SELECT
+	<include refid="BaseColumns"/> 
+	FROM BOARD
+</select>
+
+<insert id = "insert" parameterType="board">
+	<![CDATA[ 
+	INSERT INTO BOARD 
+	(BNO,MID,BTITLE,BCONTENT,BDATE,BHIT,BGROUP,BSTEP,BINDENT)
+	VALUES
+	(BOARD_SEQ.NEXTVAL,#{mid},#{btitle},#{bcontent},#{bdate},#{bhit},#{bgroup},#{bstep},#{bindent})
+	]]>
+</insert>
+
+<update id ="update" parameterType="board">
+	UPDATE BOARD SET 
+		MID=#{mid},
+		BTITLE=#{btitle},
+		BCONTENT=#{bcontent},
+		BDATE=#{bdate},
+		BHIT=#{bhit},
+		BGROUP=#{bgroup},
+		BSTEP=#{bstep},
+		BINDENT =#{bindent}
+	WHERE BNO = #{bno} 
+</update>
+
+<delete id="delete" parameterType="long">
+	DELETE FROM BOARD WHERE BNO=#{bno}
+</delete>
+
+<select id = "selectById" parameterType="long" resultMap="result">
+	SELECT * FROM BOARD WHERE BNO=#{bno}
+</select>
+
+<select id = "countRows" resultType="long">
+	SELECT COUNT(*) FROM BOARD
+</select>
+
+</mapper> 
